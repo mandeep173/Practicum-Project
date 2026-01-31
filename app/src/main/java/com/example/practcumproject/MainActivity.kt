@@ -32,17 +32,16 @@ import java.util.concurrent.TimeUnit
 
 private val Aqua = Color(0xFF00E5FF)
 
-private val TrueBlackColors = darkColorScheme(
+private val DarkColors = darkColorScheme(
     primary = Aqua,
-    onPrimary = Color.Black,
     background = Color.Black,
-    onBackground = Color.White,
     surface = Color.Black,
+    onPrimary = Color.Black,
+    onBackground = Color.White,
     onSurface = Color.White,
-    surfaceVariant = Color.Black,
-    onSurfaceVariant = Color.White,
     outline = Aqua
 )
+
 
 class MainActivity : ComponentActivity(), SensorEventListener {
 
@@ -67,11 +66,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
 
         setContent {
-            MaterialTheme(colorScheme = TrueBlackColors) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.Black
-                ) {
+            MaterialTheme(colorScheme = DarkColors) {
+                Surface(modifier = Modifier.fillMaxSize(), color = Color.Black) {
                     if (currentLabel == null) {
                         HomeScreen { startSession(it) }
                     } else {
@@ -139,6 +135,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
+
     private fun saveDataToCSV() {
         if (sensorDataList.isEmpty()) return
 
@@ -154,7 +151,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         }
         writer.close()
 
-        Toast.makeText(this, "Session saved to external storage", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Session saved", Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -167,8 +164,8 @@ fun HomeScreen(onSelect: (String) -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
-            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp, top = 40.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
+            .padding(top = 48.dp, start = 20.dp, end = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -181,19 +178,12 @@ fun HomeScreen(onSelect: (String) -> Unit) {
 
         Text(
             text = "Select an activity to start recording",
-            color = Color.White
+            fontSize = 16.sp,
+            color = Color.White.copy(alpha = 0.8f)
         )
 
-        listOf(
-            "🚶 Walking",
-            "🪑 Sitting",
-            "🧍 Standing",
-            "🏃 Running"
-        ).forEach { label ->
-            ActivityCard(
-                label = label,
-                onClick = { onSelect(label.substringAfter(" ")) }
-            )
+        listOf("🚶 Walking", "🪑 Sitting", "🧍 Standing", "🏃 Running").forEach {
+            ActivityCard(it) { onSelect(it.substringAfter(" ")) }
         }
 
         OutlinedTextField(
@@ -201,12 +191,12 @@ fun HomeScreen(onSelect: (String) -> Unit) {
             onValueChange = { customActivity = it },
             label = { Text("Custom activity", color = Color.White) },
             textStyle = LocalTextStyle.current.copy(color = Color.White),
+            modifier = Modifier.fillMaxWidth(),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Aqua,
                 unfocusedBorderColor = Color.White,
                 cursorColor = Aqua
-            ),
-            modifier = Modifier.fillMaxWidth()
+            )
         )
 
         Button(
@@ -216,8 +206,8 @@ fun HomeScreen(onSelect: (String) -> Unit) {
                     customActivity = ""
                 }
             },
-            colors = ButtonDefaults.buttonColors(containerColor = Aqua),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Aqua)
         ) {
             Text("Start", color = Color.Black)
         }
@@ -227,23 +217,21 @@ fun HomeScreen(onSelect: (String) -> Unit) {
 @Composable
 fun ActivityCard(label: String, onClick: () -> Unit) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = Color.Black),
-        shape = RoundedCornerShape(20.dp),
-        border = BorderStroke(1.dp, Aqua),
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() }
+            .clickable { onClick() },
+        colors = CardDefaults.cardColors(containerColor = Color.Black),
+        border = BorderStroke(1.dp, Aqua),
+        shape = RoundedCornerShape(18.dp)
     ) {
         Text(
             text = label,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Medium,
             color = Color.White,
+            fontSize = 20.sp,
             modifier = Modifier.padding(20.dp)
         )
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -267,11 +255,7 @@ fun ActivityScreen(
     val minutes = TimeUnit.MILLISECONDS.toMinutes(elapsed)
     val seconds = TimeUnit.MILLISECONDS.toSeconds(elapsed) % 60
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-    ) {
+    Column(modifier = Modifier.fillMaxSize().background(Color.Black)) {
 
         TopAppBar(
             title = { Text(activityName, color = Aqua) },
@@ -280,9 +264,7 @@ fun ActivityScreen(
                     Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
                 }
             },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Black
-            )
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Black)
         )
 
         Column(
@@ -300,10 +282,7 @@ fun ActivityScreen(
                 color = Aqua
             )
 
-            Text(
-                text = if (isRecording) "Recording" else "Stopped",
-                color = Color.White
-            )
+            Text(if (isRecording) "Recording" else "Stopped", color = Color.White)
 
             OutlinedButton(
                 onClick = onStop,
@@ -316,8 +295,8 @@ fun ActivityScreen(
 
             Button(
                 onClick = onSave,
-                colors = ButtonDefaults.buttonColors(containerColor = Aqua),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Aqua)
             ) {
                 Text("Save Session", color = Color.Black)
             }
