@@ -169,7 +169,8 @@ fun HomeScreen(onSelect: (String) -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
-            .padding(20.dp),
+            // 👇 EXTRA SPACE FROM TOP ADDED HERE
+            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp, top = 40.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
