@@ -29,7 +29,6 @@ import kotlinx.coroutines.delay
 import java.io.File
 import java.util.concurrent.TimeUnit
 
-/* ---------------- TRUE BLACK THEME ---------------- */
 
 private val Aqua = Color(0xFF00E5FF)
 
@@ -159,8 +158,6 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     }
 }
 
-/* ---------------- HOME SCREEN ---------------- */
-
 @Composable
 fun HomeScreen(onSelect: (String) -> Unit) {
     var customActivity by remember { mutableStateOf("") }
@@ -169,7 +166,6 @@ fun HomeScreen(onSelect: (String) -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
-            // 👇 EXTRA SPACE FROM TOP ADDED HERE
             .padding(start = 20.dp, end = 20.dp, bottom = 20.dp, top = 40.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -246,8 +242,6 @@ fun ActivityCard(label: String, onClick: () -> Unit) {
         )
     }
 }
-
-/* ---------------- ACTIVITY SCREEN ---------------- */
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
