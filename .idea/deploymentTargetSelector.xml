@@ -7,7 +7,7 @@
       </SelectionState>
       <SelectionState runConfigName="Practicum_Project.app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-01-31T17:18:09.135008Z">
+        <DropdownSelection timestamp="2026-01-31T17:35:12.269692Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="PhysicalDevice" identifier="serial=RZCX11H761V" />

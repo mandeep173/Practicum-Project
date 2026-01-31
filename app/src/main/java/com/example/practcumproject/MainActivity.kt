@@ -142,7 +142,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private fun saveDataToCSV() {
         if (sensorDataList.isEmpty()) return
 
-        val file = File(filesDir, "har_data.csv")
+        val file = File(getExternalFilesDir(null), "har_data.csv")
         val writer = file.bufferedWriter()
 
         writer.write("timestamp,accX,accY,accZ,gyroX,gyroY,gyroZ,label\n")
@@ -154,9 +154,10 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         }
         writer.close()
 
-        Toast.makeText(this, "Session saved", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Session saved to external storage", Toast.LENGTH_SHORT).show()
     }
 }
+
 
 @Composable
 fun HomeScreen(onSelect: (String) -> Unit) {
@@ -242,6 +243,7 @@ fun ActivityCard(label: String, onClick: () -> Unit) {
         )
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
